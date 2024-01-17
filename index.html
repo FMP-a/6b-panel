@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutzerseite</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 50px;
+        }
+
+        form {
+            max-width: 300px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #successMessage {
+            color: green;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <form id="userLoginForm">
+        <h2>Nutzer Login</h2>
+        <label for="userUsername">Benutzername:</label>
+        <input type="text" id="userUsername" name="userUsername" required>
+
+        <label for="userPassword">Passwort:</label>
+        <input type="password" id="userPassword" name="userPassword" required>
+
+        <button type="button" onclick="userLogin()">Einloggen</button>
+    </form>
+
+    <div id="successMessage"></div>
+
+    <script>
+        function userLogin() {
+            var userUsername = document.getElementById('userUsername').value;
+            var userPassword = document.getElementById('userPassword').value;
+
+            // Hier sollte die Überprüfung der Anmeldeinformationen stattfinden
+            // Zum Beispiel können Sie AJAX verwenden, um die Daten an den Server zu senden
+
+            // Überprüfung des Benutzers im Local Storage
+            var storedUser = localStorage.getItem(userUsername);
+
+            if (storedUser) {
+                storedUser = JSON.parse(storedUser);
+                if (userPassword === storedUser.password) {
+                    document.getElementById('successMessage').innerHTML = 'Erfolgreich eingeloggt!';
+                    // Hier den Benutzer zur welcome.html Seite weiterleiten
+                    window.location.href = 'alles.html';
+                } else {
+                    alert('Falsches Passwort.');
+                }
+            } else {
+                alert('Benutzer nicht gefunden.');
+            }
+        }
+    </script>
+</body>
+</html>

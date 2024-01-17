@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 50px;
+        }
+
+        form {
+            max-width: 300px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #userList {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        #successMessage {
+            color: green;
+            margin-top: 10px;
+        }
+
+        #updateForm {
+            margin-top: 20px;
+        }
+
+        #updateList {
+            text-align: left;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <form id="adminLoginForm">
+        <h2>Admin Login</h2>
+        <label for="adminUsername">Benutzername:</label>
+        <input type="text" id="adminUsername" name="adminUsername" required>
+
+        <label for="adminPassword">Passwort:</label>
+        <input type="password" id="adminPassword" name="adminPassword" required>
+
+        <button type="button" onclick="adminLogin()">Einloggen</button>
+    </form>
+
+    <div id="adminPanel" style="display: none;">
+        <form id="createUserForm">
+            <h2>Benutzer erstellen</h2>
+            <label for="newUsername">Neuer Benutzername:</label>
+            <input type="text" id="newUsername" name="newUsername" required>
+
+            <label for="newPassword">Neues Passwort:</label>
+            <input type="password" id="newPassword" name="newPassword" required>
+
+            <label for="confirmPassword">Passwort bestätigen:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+            <button type="button" onclick="createUser()">Benutzer erstellen</button>
+        </form>
+
+        <div id="userList">
+            <h2>Benutzerliste</h2>
+            <ul id="users"></ul>
+        </div>
+
+        <div id="successMessage"></div>
+
+        <div id="updateForm">
+            <form id="publishUpdateForm">
+                <h2>Neues Update veröffentlichen</h2>
+                <label for="updateMessage">Update-Nachricht:</label>
+                <input type="text" id="updateMessage" name="updateMessage" required>
+
+                <button type="button" onclick="publishUpdate()">Veröffentlichen</button>
+            </form>
+        </div>
+
+        <div id="updateList">
+            <h2>Update-Verlauf</h2>
+            <ul id="updates"></ul>
+        </div>
+    </div>
+
+    <script>
+        function adminLogin() {
+            var adminUsername = document.getElementById('adminUsername').value;
+            var adminPassword = document.getElementById('adminPassword').value;
+
+            if (adminUsername === 'admin' && adminPassword === 'adminpassword') {
+                document.getElementById('adminLoginForm').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                // Benutzerliste aktualisieren, wenn der Admin eingeloggt ist
+                updateUserList();
+                // Update-Liste aktualisieren
+                updateUpdateList();
+            } else {
+                alert('Falscher Benutzername oder falsches Passwort.');
+            }
+        }
+
+        function createUser() {
+            var newUsername = document.getElementById('newUsername').value;
+            var newPassword = document.getElementById('newPassword').value;
+            var confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword === confirmPassword) {
+                // Hier sollten Sie die Benutzererstellung auf dem Server durchführen
+                // Zum Beispiel können Sie AJAX verwenden, um die Daten an den Server zu senden
+
+                // Für dieses Beispiel speichern wir den Benutzer im Local Storage
+                localStorage.setItem(newUsername, JSON.stringify({ password: newPassword }));
+
+                // Erfolgsmeldung anzeigen
+                document.getElementById('successMessage').innerHTML = 'Du hast ' + newUsername + ' erstellt.';
+
+                // Benutzerliste aktualisieren
+                updateUserList();
+            } else {
+                alert('Passwortbestätigung stimmt nicht überein.');
+            }
+        }
+
+        function updateUserList() {
+            var userList = document.getElementById('users');
+            userList.innerHTML = '';
+
+            // Alle Benutzer aus dem Local Storage abrufen und zur Liste hinzufügen
+            for (var i = 0; i < localStorage.length; i++) {
+                var username = localStorage.key(i);
+                userList.innerHTML += '<li>' + username + '</li>';
+            }
+        }
+
+        function publishUpdate() {
+            var updateMessage = document.getElementById('updateMessage').value;
+
+            // Hier sollten Sie die Update-Veröffentlichung auf dem Server durchführen
+            // Zum Beispiel können Sie AJAX verwenden, um die Daten an den Server zu senden
+
+            // Für dieses Beispiel fügen wir die Update-Nachricht in den Local Storage ein
+            var updates = localStorage.getItem('updates');
+            updates = updates ? JSON.parse(updates) : [];
+            updates.push(updateMessage);
+            localStorage.setItem('updates', JSON.stringify(updates));
+
+            // Erfolgsmeldung anzeigen
+            document.getElementById('successMessage').innerHTML = 'Update erfolgreich veröffentlicht.';
+
+            // Update-Liste aktualisieren
+            updateUpdateList();
+        }
+
+        function updateUpdateList() {
+            var updateList = document.getElementById('updates');
+            updateList.innerHTML = '';
+
+            // Update-Nachrichten aus dem Local Storage abrufen und zur Liste hinzufügen
+            var updates = localStorage.getItem('updates');
+            updates = updates ? JSON.parse(updates) : [];
+
+            updates.forEach(function (updateMessage) {
+                updateList.innerHTML += '<li>' + updateMessage + '</li>';
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update-Verlauf</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #282c34;
+            color: white;
+            padding: 50px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #61dafb;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #444;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <h1>Update-Verlauf</h1>
+
+    <ul id="updates"></ul>
+
+    <script>
+        function updateUpdateList() {
+            var updateList = document.getElementById('updates');
+            updateList.innerHTML = '';
+
+            // Update-Nachrichten aus dem Local Storage abrufen und zur Liste hinzufügen
+            var updates = localStorage.getItem('updates');
+            updates = updates ? JSON.parse(updates) : [];
+
+            updates.forEach(function (updateMessage) {
+                var listItem = document.createElement('li');
+                listItem.textContent = updateMessage;
+                updateList.appendChild(listItem);
+            });
+        }
+
+        // Aktualisiere die Liste beim Laden der Seite
+        updateUpdateList();
+    </script>
+</body>
+</html>
