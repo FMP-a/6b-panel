@@ -1,0 +1,12 @@
+body{
+    background-color: gray;
+}
+
+chat-senden{
+    border-radius: 2px;
+    color:aquamarine, gray;
+}
+
+.container{
+    size: 5px, 2px, 1px;
+}
